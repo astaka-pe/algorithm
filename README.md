@@ -2,10 +2,12 @@
 
 **アルゴリズムとデータ構造**のコード（C++）をpythonに書き換えたもの。
 
+ソースコードは、`chap{**}/code/`を参照。
+
 <table>
     <tr>
-        <td width="15"></td>
-        <td></td>
+        <td width="15">章</td>
+        <td>タイトル</td>
         <td width="100">重要度</td>
         <td width="100">難易度</td>
     </tr>
@@ -74,7 +76,7 @@
     <tr>
     <td width="15">9</td>
         <td>
-            <a href="chap09">スタックとキュー</a>
+            *<a href="chap09">スタックとキュー</a>
         </td>
         <td width="100">★★★★</td>
         <td width="100">★</td>
@@ -98,7 +100,7 @@
     <tr>
     <td width="15">12</td>
         <td>
-            <a href="chap12">ソート</a>
+            *<a href="chap12">ソート</a>
         </td>
         <td width="100">★★★★</td>
         <td width="100">★</td>
@@ -106,7 +108,7 @@
     <tr>
     <td width="15">13</td>
         <td>
-            <a href="chap13">グラフ探索</a>
+            *<a href="chap13">グラフ探索</a>
         </td>
         <td width="100">★★★★★</td>
         <td width="100">★★★★</td>
@@ -138,12 +140,14 @@
     <tr>
     <td width="15">17</td>
         <td>
-            <a href="chap17">PとNP</a>
+            *<a href="chap17">PとNP</a>
         </td>
         <td width="100">---</td>
         <td width="100">---</td>
     </tr>
 </table>
+
+*コード未完成 or コード無し
 
 8, 9, 12は既存のライブラリor関数を使えれば困らない（何をしていて計算量がどれくらいか、を知っておけば一から実装する必要はない）。
 <!-- 
