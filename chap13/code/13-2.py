@@ -20,7 +20,8 @@ for v in range(N):
     if seen[v]:
         continue
     dfs(G, v)
-    
+
+# 連結の無向グラフの場合、dfs[G, 0]だけで全頂点が探索済になる
 
 """
 8 12

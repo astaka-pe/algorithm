@@ -108,7 +108,7 @@
     <tr>
     <td width="15">13</td>
         <td>
-            *<a href="chap13">グラフ探索</a>
+            <a href="chap13">グラフ探索</a>
         </td>
         <td width="100">★★★★★</td>
         <td width="100">★★★★</td>

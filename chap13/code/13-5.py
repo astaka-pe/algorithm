@@ -6,7 +6,7 @@ def dfs(G, v, cur=0):
         if color[next_v] != -1:
             # 同じ色が隣接した場合は二部グラフではない
             if color[next_v] == cur:
-                return False
+                return False    # 探索中に二部グラフでないことが判明したらそこで打ち切る
             continue
         # 隣接頂点の色を変えて再帰的に探索
         if dfs(G, next_v, 1-cur) == False:
@@ -22,13 +22,31 @@ for i in range(M):
     G[a].append(b) 
     G[b].append(a) #無向グラフ
 
+general = True
 color = [-1]*N
-is_bipartite = True
-for v in range(N):
-    if color[v] != -1:
-        continue
-    if dfs(G, v) == False:
-        is_bipartite = False
+if general:
+    """
+    本に書いてあるのはこちら（冗長な気がする）
+    一般的なグラフ（非接続グラフ）では有効？
+    """
+    is_bipartite = True
+    for v in range(N):
+        if color[v] != -1:
+            continue
+        # 頂点vの色が決まっていない場合 -> 探索中に二部グラフでないことが判明している
+        # 頂点vを0で塗って塗れなくなるまで隣接を探索（必ず途中でFalseになるはず）
+        # 接続グラフでは冗長（塗れない頂点が0で塗られるだけ）
+        if dfs(G, v) == False:
+            is_bipartite = False
+    print(color)
+
+else:
+    """
+    接続グラフでは頂点0スタートのDFSで十分
+    """
+    is_bipartite = dfs(G, 0)
+    print(color)
+
 if is_bipartite:
     print("Yes")
 else:
