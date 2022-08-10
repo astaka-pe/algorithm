@@ -1,63 +1,88 @@
-from collections import deque
+import math
+from tkinter import W
 
-class Dinic:
+class Edge:
+    def __init__(self, r, f, t, c):
+        """
+        rev: 逆辺(to, fro)がG[to]の中で何番目の要素か
+        cap: 辺(from, to)の容量
+        """
+        self.rev = r
+        self.fro = f
+        self.to = t
+        self.cap = c
+
+class Graph:
     def __init__(self, n):
-        self.n = n
-        self.links = [[] for _ in range(n)]
-        self.depth = None
-        self.progress = None
+        self.glist = [[] for _ in range(n)]
+        self.size = n
+
+    def redge(self, e):
+        return self.glist[e.to][e.rev]
     
-    def add_link(self, _from, to, cap):
-        self.links[_from].append([cap, to, len(self.links[to])])
-        self.links[to].append([0, _from, len(self.links[_from])-1])
+    def run_flow(self, e, f):
+        e.cap -= f
+        self.redge(e).cap += f
     
-    def bfs(self, s):
-        depth = [-1] * self.n
-        depth[s] = 0
-        q = deque([s])
-        while q:
-            v = q.popleft()
-            for cap, to, rev in self.links[v]:
-                if cap>0 and depth[to]<0:
-                    depth[to] = depth[v]+1
-                    q.append(to)
-        self.depth = depth
+    def addedge(self, fro, to, cap):
+        """
+        fromからtoへ容量capの辺を張る
+        toからfromへ容量0の辺も張る
+        """
+        fromrev = len(self.glist[fro])
+        torev = len(self.glist[to])
+        self.glist[fro].append(Edge(torev, fromrev, to, cap))
+        self.glist[to].append(Edge(fromrev, to, fro, 0))
+
+class FordFulkerson:
+    def __init__(self):
+        self.seen = []
     
-    def dfs(self, v, t, flow):
-        if v==t:
+    def fodfs(self, G, v, t, f):
+        """
+        残余グラフ上でs-tパスを見つける
+        s-tパス上の容量の最小値を返す（なければ0）
+        f: sからvへ到達した過程の各辺の容量の最小値
+        """
+        # 終端tに達したらリターン
+        if v == t:
+            return f
+        
+        # dfs
+        self.seen[v] = True
+        for e in G.glist[v]:
+            if self.seen[e.to]:
+                continue
+            if e.cap == 0:
+                continue
+            flow = self.fodfs(G, e.to, t, min(f, e.cap))
+            if flow == 0:
+                continue
+            G.run_flow(e, flow)
             return flow
-        links_v = self.links[v]
-        for i in range(self.progress[v], len(links_v)):
-            self.progress[v] = i
-            cap, to, rev = link = links_v[i]
-            if cap==0 or self.depth[v]>=self.depth[to]:
-                continue
-            d = self.dfs(to, t, min(flow, cap))
-            if d == 0:
-                continue
-            link[0] -= d
-            self.links[to][rev][0] += d
-            return d
         return 0
     
-    def max_flow(self, s, t):
-        flow = 0
+    def solve(self, G, s, t):
+        res = 0
         while True:
-            self.bfs(s)
-            if self.depth[t]<0:
-                return flow
-            self.progress = [0]*self.n
-            current_flow = self.dfs(s, t, float('inf'))
-            while current_flow>0:
-                flow += current_flow
-                current_flow = self.dfs(s,t,float('inf'))
+            self.seen = [False]*G.size
+            flow = self.fodfs(G, s, t, math.inf)
+
+            if flow == 0:
+                return res
+            res += flow
+        return 0
+
 N, M = map(int, input().split())
-mf = Dinic(M)
+G = Graph(N)
 for i in range(M):
     a, b, c = map(int, input().split())
-    mf.add_link(a, b, c)
-print(mf.max_flow(0,N-1))
+    G.addedge(a, b, c)
 
+ff = FordFulkerson()
+s = 0
+t = N - 1
+print(ff.solve(G, s, t))
 """
 6 7 
 0 1 10
