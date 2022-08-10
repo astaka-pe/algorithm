@@ -1,5 +1,4 @@
 import math
-from tkinter import W
 
 class Edge:
     def __init__(self, r, f, t, c):
